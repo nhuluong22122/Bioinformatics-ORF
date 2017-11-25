@@ -12,7 +12,8 @@ function reverse(s){
 				var current = s.slice(i, i + frame);
 				console.log("current: " + current);
 				if(current.length == 3){
-					if(current.slice(1,2) == "A"){
+					if(current.slice(0,1) == "A"){
+						console.log("Found A");
 						if(current == "AUG") tempArray.push("Start");
 						else if(current == "AUU" || current == "AUC" || current == "AUA") tempArray.push("I");
 						else if(current == "ACU" || current == "ACC" || current == "ACA" || current == "ACG") tempArray.push("T");
@@ -21,7 +22,7 @@ function reverse(s){
 						else if(current == "AGU" || current == "AGC") tempArray.push("S");
 						else if(current == "AGA" || current == "AGG") tempArray.push("R");
 					}
-					else if(current.slice(1,2) == "U"){
+					else if(current.slice(0,1) == "U"){
 						console.log("Found U");
 						if(current == "UUA" || current == "UAG" || current == "UGA") tempArray.push("Stop");
 						else if(current == "UUU" ||  current == "UUC" ) tempArray.push("F");
@@ -31,7 +32,7 @@ function reverse(s){
 						else if(current = "UGU" || current == "UGC") tempArray.push("C");
 						else if(current == "UGG") tempArray.push("W");
 					}
-					else if(current.slice(1,2) == "C"){
+					else if(current.slice(0,1) == "C"){
 						console.log("Found C");
 						if(current == "CCU" || current == "CCC" || current == "CCA" || current == "CCG" ) tempArray.push("P");
 						else if(current == "CUU" || current== "CUC" || current == "CUA" || current == "CUG") tempArray.push("L")
@@ -39,7 +40,7 @@ function reverse(s){
 						else if(current == "CAA" || current == "CAG") tempArray.push("Q");
 						else if(current == "CGU" || current== "CGC" || current == "CGA" || current == "CGG") tempArray.push("R");
 					}
-					else if(current.slice(1, 2) == "G"){
+					else if(current.slice(0, 1) == "G"){
 						console.log("Found G");
 						if(current == "GUU" || current== "GUC" || current == "GUA" || current == "GUG") tempArray.push("V");
 						else if(current == "GCU" || current == "GCC" || current == "GCA" || current == "GCG") tempArray.push("A");
@@ -51,17 +52,17 @@ function reverse(s){
 				if(i == s.length - 1 || i == s.length - 2 || i == s.length - 3) {
 					return tempArray;
 				}
-				console.log("Counter: " + i + " Array: " + tempArray + " length: " + tempArray.length);
+				// console.log("Counter: " + i + " Array: " + tempArray + " length: " + tempArray.length);
 			}			
 		}
 		function convertToMRA(s){
 			var result = "";
 			for(i = 0; i < s.length; i++){
 				var base = s.slice(i, i+1);
-				if(base == "C") result += "G";
-				else if(base == "G") result += "C";
-				else if(base == "A") result += "U";
-				else if(base == "T") result += "A";
+				if(base == "C") result += "C";
+				else if(base == "G") result += "G";
+				else if(base == "A") result += "A";
+				else if(base == "T") result += "U";
 			}
 			if(result.length == s.length){
 				return result;
@@ -88,19 +89,19 @@ function reverse(s){
 					var base = coding.slice(i, i+1);
 					if(base == "C") {
 						template += "G";
-						codingMRA += "G";
+						codingMRA += "C";
 					}
 					else if(base == "G") {
 						template += "C";
-						codingMRA += "C";
+						codingMRA += "G";
 					}
 					else if(base == "A") {
 						template += "T";
-						codingMRA += "U"; //Convert to MRA
+						codingMRA += "A"; //Convert to MRA
 					}
 					else if(base == "T") {
 						template += "A";
-						codingMRA += "A";
+						codingMRA += "U";
 					}
 				}
 				setTimeout(function() {
