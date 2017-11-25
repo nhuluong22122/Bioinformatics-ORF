@@ -9,15 +9,21 @@
 	<button onclick="convertORF()">Submit</button>	
 
 	<p id="length"></p>
-	<h3>Template Strand</h3>
-
-	<p id="template"></p>
-	<h3>rMRA</h3>
-
-	<p id="mra"></p>
-	<h3>Six Reading Frame</h3>
-
-	<p id="protein"></p>
+	<div id="DNA">
+		<h2 id="title1">DNA Helix</h2>
+		<p id="template"></p>
+	</div>
+	<!-- <h3 id="title2">rMRA</h3>
+	<p id="mra"></p> -->
+	<div id="frame">
+		<h2 id="title3">Six Reading Frames</h2>
+		<div style="width: 50%; float:left">
+			<p id="proteinCoding"></p>
+		</div>
+		<div style="width: 50%; float:right">
+			<p id="proteinTemplate"></p>
+		</div>
+	</div>
 	<img src="http://ccs.miami.edu/wp-content/uploads/2015/02/ccbi.jpg" id="background" alt="">	
 	<script src="script.js"></script>
 </body>
