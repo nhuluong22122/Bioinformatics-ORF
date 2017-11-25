@@ -1,0 +1,9 @@
+body{
+	text-align: center;
+	word-wrap: break-word;
+}
+textarea{
+	padding-top: 0px;
+	width: 500px;
+	height: 200px;
+}	
