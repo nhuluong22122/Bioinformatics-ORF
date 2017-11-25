@@ -1,9 +1,45 @@
 body{
 	text-align: center;
 	word-wrap: break-word;
+	height:100%;
+    background: #aff000; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left,#00cef6, #3c78d8); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(left,#00cef6,#3c78d8); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(left,#00cef6, #3c78d8); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(left,#00cef6, #3c78d8); /* Standard syntax */
+    color: white;
+    font-family: Source Sans Pro;
+    padding: 50px;
+}
+h1{
+	font-size: 50px;
 }
 textarea{
 	padding-top: 0px;
 	width: 500px;
 	height: 200px;
+	border: none;
+	border-radius: 10px;
+	padding: 10px;
+	color: #28324a;
+	font-size: 12px;
 }	
+#background{
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+	
+  /* Preserve aspet ratio */
+  min-width: 100%;
+  min-height: 100%;
+  opacity: 0.1;
+  z-index:-1;
+}
+button {
+	padding: 10px;
+	width: 150px;
+	height: 60px;
+	font-size: 15px;
+	border: none;
+	margin: 10px;
+}

@@ -13,7 +13,6 @@ function reverse(s){
 				console.log("current: " + current);
 				if(current.length == 3){
 					if(current.slice(0,1) == "A"){
-						console.log("Found A");
 						if(current == "AUG") tempArray.push("Start");
 						else if(current == "AUU" || current == "AUC" || current == "AUA") tempArray.push("I");
 						else if(current == "ACU" || current == "ACC" || current == "ACA" || current == "ACG") tempArray.push("T");
@@ -23,7 +22,6 @@ function reverse(s){
 						else if(current == "AGA" || current == "AGG") tempArray.push("R");
 					}
 					else if(current.slice(0,1) == "U"){
-						console.log("Found U");
 						if(current == "UUA" || current == "UAG" || current == "UGA") tempArray.push("Stop");
 						else if(current == "UUU" ||  current == "UUC" ) tempArray.push("F");
 						else if(current == "UUA" || current == "UUG") tempArray.push("L");
@@ -33,7 +31,6 @@ function reverse(s){
 						else if(current == "UGG") tempArray.push("W");
 					}
 					else if(current.slice(0,1) == "C"){
-						console.log("Found C");
 						if(current == "CCU" || current == "CCC" || current == "CCA" || current == "CCG" ) tempArray.push("P");
 						else if(current == "CUU" || current== "CUC" || current == "CUA" || current == "CUG") tempArray.push("L")
 						else if(current == "CAU" || current =="CAC") tempArray.push("H");
@@ -41,7 +38,6 @@ function reverse(s){
 						else if(current == "CGU" || current== "CGC" || current == "CGA" || current == "CGG") tempArray.push("R");
 					}
 					else if(current.slice(0, 1) == "G"){
-						console.log("Found G");
 						if(current == "GUU" || current== "GUC" || current == "GUA" || current == "GUG") tempArray.push("V");
 						else if(current == "GCU" || current == "GCC" || current == "GCA" || current == "GCG") tempArray.push("A");
 						else if(current == "GAU" || current == "GAC") tempArray.push("D");
@@ -118,6 +114,7 @@ function reverse(s){
 						fourthMRA = templateMRA;
 						fifthMRA = templateMRA.slice(1);
 						sixthMRA = templateMRA.slice(2);
+						document.getElementById("length").innerHTML = "LENGTH: " + coding.length;
 						document.getElementById("template").innerHTML = template;
 						document.getElementById("mra").innerHTML = "1st MRA: " + firstMRA +
 																	  "<br>2nd MRA: " + secondMRA +
