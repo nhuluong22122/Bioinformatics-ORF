@@ -34,11 +34,11 @@ function validateFasta(fasta) {
 function convertToProtein(s){
 	var frame = 3;
 	var tempArray = new Array();
-	for(var i = 0; i < s.length; i+= frame){
+	for(var i = 0; i < s.length + 1; i += frame){
 		var current = s.slice(i, i + frame);
 		if(current.length == 3){
 			if(current.slice(0,1) == "A"){
-				if(current == "AUG") tempArray.push("+");
+				if(current == "AUG") tempArray.push("M");
 				else if(current == "AUU" || current == "AUC" || current == "AUA") tempArray.push("I");
 				else if(current == "ACU" || current == "ACC" || current == "ACA" || current == "ACG") tempArray.push("T");
 				else if(current == "AAU" || current == "AAC") tempArray.push("N");
@@ -47,7 +47,7 @@ function convertToProtein(s){
 				else if(current == "AGA" || current == "AGG") tempArray.push("R");
 			}
 			else if(current.slice(0,1) == "U"){
-				if(current == "UAA" || current == "UAG" || current == "UGA") tempArray.push("-");
+				if(current == "UAA" || current == "UAG" || current == "UGA") tempArray.push("*");
 				else if(current == "UUU" ||  current == "UUC" ) tempArray.push("F");
 				else if(current == "UUA" || current == "UUG") tempArray.push("L");
 				else if(current == "UCC" || current == "UCC" || current == "UCA" || current == "UCG") tempArray.push("S");
@@ -70,10 +70,9 @@ function convertToProtein(s){
 				else if(current == "GGU" || current== "GGC" || current == "GGA" || current == "GGG") tempArray.push("G");
 			}
 		}
-		if(i == s.length - 1 || i == s.length - 2 || i == s.length - 3) {
+		else{
 			return tempArray;
 		}
-		// console.log("Counter: " + i + " Array: " + tempArray + " length: " + tempArray.length);
 	}			
 }
 function convertToMRA(s){
@@ -89,25 +88,53 @@ function convertToMRA(s){
 		return result;
 	}
 }
-function formatProtein(s, interval){
-	console.log(s);
+function formatProtein(s, interval, framePosition){
 	var proteinDisplay = "";
+	var array = new Array();
 	for(var i = 0; i < s.length; i++){
-		if(i == 0) proteinDisplay +=  i + "<br>"; 
- 		else if(i % Math.round(interval / 3) == 0) proteinDisplay += "<br>" + (i * 3) + "<br>";
- 		proteinDisplay += "&nbsp";
- 		if(s.slice(i, i + 1) == "+") proteinDisplay += "[&nbsp" + s.slice(i, i + 1);
- 		else if(s.slice(i, i + 1) == "-") proteinDisplay +=  s.slice(i, i + 1) + "&nbsp]";
- 		else proteinDisplay += s.slice(i, i + 1);	
- 		proteinDisplay += "&nbsp";
+		if(i == 0) {
+			proteinDisplay += framePosition + " : "; 
+			switch(framePosition){
+ 			case 1: { proteinDisplay += "&nbsp&nbsp"; break;}
+ 			case 2: { proteinDisplay += "&nbsp&nbsp&nbsp"; break; }
+ 			case 3: { proteinDisplay += "&nbsp&nbsp&nbsp&nbsp"; break;}
+ 			case -1: { proteinDisplay += "&nbsp&nbsp"; break; }
+ 			case -2: { proteinDisplay += "&nbsp&nbsp&nbsp"; break; }
+ 			case -3: { proteinDisplay += "&nbsp&nbsp&nbsp&nbsp"; break;}
+ 			}
+		} 
+ 		else if(i % Math.round(interval / 3) == 0) {
+ 			array.push(proteinDisplay);
+ 			proteinDisplay = "";
+ 			proteinDisplay += framePosition + " : ";	
+ 			switch(framePosition){
+ 			case 1: { proteinDisplay += "&nbsp&nbsp"; break;}
+ 			case 2: { proteinDisplay += "&nbsp&nbsp&nbsp"; break; }
+ 			case 3: { proteinDisplay += "&nbsp&nbsp&nbsp&nbsp"; break;}
+ 			case -1: { proteinDisplay += "&nbsp&nbsp"; break; }
+ 			case -2: { proteinDisplay += "&nbsp&nbsp&nbsp"; break; }
+ 			case -3: { proteinDisplay += "&nbsp&nbsp&nbsp&nbsp"; break;}
+ 			}
+ 		}
+ 		// if(s.slice(i, i + 1) == "+") proteinDisplay += "[&nbsp" + s.slice(i, i + 1);
+ 		// else if(s.slice(i, i + 1) == "-") proteinDisplay +=  s.slice(i, i + 1) + "&nbsp]";
+ 		// else 
+ 		if(s.slice(i, i + 1) == "M") proteinDisplay += "&nbsp&nbsp<span style='color:#aff000 ;font-weight:bold'>" + s.slice(i, i + 1) + "</span>&nbsp&nbsp";
+ 		else if(s.slice(i, i + 1) == "*") proteinDisplay += "&nbsp&nbsp<span style='color:#aff000 ;font-weight:bold'>" + s.slice(i, i + 1) + "</span>&nbsp&nbsp";
+ 		else proteinDisplay += "&nbsp&nbsp" + s.slice(i, i + 1) + "&nbsp&nbsp";
+ 		if(i == s.length - 1){
+			array.push(proteinDisplay);
+ 		}
 	}
-	return proteinDisplay;
+	return array;
 }
 function convertORF(){
 	var coding = document.getElementById("input").value;
-	alert(validateFasta(coding));
 	if(coding.length == 0 || !/[ACTG]/.test(coding.toUpperCase())){
-		alert("Please valid DNA sequence with only ACTG cases");
+		alert("Please valid DNA sequence with only ACTG bases");
+	}
+	else if(coding.length < 5){
+		alert("Please enter at least 5 bases");
 	}
 	else {
 		coding = coding.replace(/\s+/g, '').toUpperCase();
@@ -122,7 +149,6 @@ function convertORF(){
 			fourthMRA = "",
 			fifthMRA = "",
 			sixthMRA = "";
-		alert(coding.length);
 		for(i = 0; i < coding.length; i++){
 			var base = coding.slice(i, i+1);
 			if(base == "C") {
@@ -182,29 +208,31 @@ function convertORF(){
 			 		fourthFrame = "",
 			 		fifthFrame = "",
 			 		sixthFrame = "";
-				if(firstProtein.length > 0) firstFrame = formatProtein(firstProtein, interval); 
-			 	if(secondProtein.length > 0) secondFrame = formatProtein(secondProtein,interval); 
-			 	if(thirdProtein.length > 0) thirdFrame = formatProtein(thirdProtein,interval); 
-			 	if(fourthProtein.length > 0)fourthFrame = formatProtein(fourthProtein,interval);
-			 	if(fifthProtein.length > 0) fifthFrame = formatProtein(fifthProtein,interval);
-			 	if(sixthProtein.length > 0) sixthFrame = formatProtein(sixthProtein,interval);
-				 document.getElementById("proteinCoding").innerHTML = "<h3>+1:</h3> " + firstFrame +
-															  "<h3>+2:</h3> " + secondFrame +
-															  "<h3>+3:</h3>" + thirdFrame + "\n";
-				document.getElementById("proteinTemplate").innerHTML = "<h3>-1:</h3>" + fourthFrame +
-															  "<h3>-2:</h3>" + fifthFrame +
-															  "<h3>-3:</h3>" + sixthFrame + "\n";
+				if(firstProtein.length > 0) firstFrame = formatProtein(firstProtein, interval, 1); 
+			 	if(secondProtein.length > 0) secondFrame = formatProtein(secondProtein,interval, 2); 
+			 	if(thirdProtein.length > 0) thirdFrame = formatProtein(thirdProtein,interval, 3); 
+			 	if(fourthProtein.length > 0)fourthFrame = formatProtein(fourthProtein,interval, -1);
+			 	if(fifthProtein.length > 0) fifthFrame = formatProtein(fifthProtein,interval, -2);
+			 	if(sixthProtein.length > 0) sixthFrame = formatProtein(sixthProtein,interval, -3);
 				for(var i = 0; i < template.length / interval; i++){
-					display += i * interval + "<br>"
+					display += i * interval + "<br>";
+					//Display Frame 1, 2, 3
+					display += thirdFrame[i] + "<br>";
+					display += secondFrame[i]+ "<br>";
+					display += firstFrame[i] + "<br>"; 
 					display += "5'&nbsp-&nbsp";
-					display += coding.slice(i * interval,(i * interval) + interval).replace(/(.{3})/g,"$1 ");
+					display += coding.slice(i * interval,(i * interval) + interval);
 					display += "&nbsp-&nbsp3'<br>";
 					display += "3'&nbsp-&nbsp";
-					display += template.slice(i * interval, (i * interval)+ interval).replace(/(.{3})/g,"$1 ");
+					display += template.slice(i * interval, (i * interval)+ interval);
 					display += "&nbsp-&nbsp5'<br>"
+					display += fourthFrame[i] + "<br>";
+					display += fifthFrame[i] + "<br>";
+					display += sixthFrame[i] + "<br><br>"; 
+					//Display Frame 3, 4, 5
 				}	
 				document.getElementById("template").innerHTML = display;
-
+				document.getElementById("DNA").style.display = "block";
 
 			 	
 			 	
